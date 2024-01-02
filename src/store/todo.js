@@ -23,7 +23,6 @@ export async function getTodos() {
     store.state.todos = res.data;
   } catch (error) {
     console.error(error);
-    throw error;
   } finally {
     store.state.loading = false;
     store.state.message = "주문목록이 없습니다.";
@@ -45,7 +44,6 @@ export async function addTodo(title, order) {
     });
   } catch (error) {
     console.error(error);
-    throw error;
   } finally {
     getTodos();
     store.state.loading = false;
@@ -61,7 +59,6 @@ export async function updateTodo(id, title, order, done, status) {
     });
   } catch (error) {
     console.error(error);
-    throw error;
   } finally {
     getTodos();
   }
@@ -72,25 +69,31 @@ export async function deleteTodo(id) {
     const res = await axios.delete(`/todos/${id}`);
   } catch (error) {
     console.error(error);
-    throw error;
   } finally {
     getTodos();
   }
 }
 
-export async function deleteAll() {
-  store.state.deleteAllLoading = true;
-  const todoIds = store.state.todos
-    .filter((todo) => todo.done === true)
-    .map((todo) => todo.id);
+export async function deleteAll(todoIds) {
   try {
     const res = await axios.delete("/todos/deletions", {
-      todoIds: todoIds,
+      todoIds,
     });
   } catch (error) {
     console.error(error);
   } finally {
     getTodos();
-    store.state.deleteAllLoading = false;
+  }
+}
+
+export async function reoreder(todoIds) {
+  try {
+    const res = await axios.put(`/todos/reorder`, {
+      todoIds,
+    });
+  } catch (error) {
+    console.error(error);
+  } finally {
+    getTodos();
   }
 }

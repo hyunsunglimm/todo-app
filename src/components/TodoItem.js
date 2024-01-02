@@ -6,19 +6,18 @@ import { matchString, replaceString } from "../utils/string";
 export default class TodoItem extends Component {
   constructor(props) {
     super({
+      tagName: "li",
       props,
     });
   }
   render() {
-    const { todo } = this.props;
+    const { todo, index } = this.props;
     this.el.innerHTML = /* html */ `
-      <div href="#/${todo.id}" class="todo-item" id="${todo.id}">
+      <div class="todo-item" id="${todo.id}" index="${index + 1}">
         <span class="material-symbols-outlined icon">${
           todo.done ? "check_circle" : "radio_button_unchecked"
         }</span>
-        <span class="${todo.done ? "done" : ""}">${todo.order} ${
-      todo.title
-    }</span>
+        <span class="${todo.done ? "done" : ""}">${todo.title}</span>
       </div>
 
       <div class="modal">

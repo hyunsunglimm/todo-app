@@ -1,6 +1,7 @@
 import { Component } from "../core/core";
-import todoStore, { deleteAll, getCategory } from "../store/todo";
+import todoStore, { deleteAll, getCategory, reoreder } from "../store/todo";
 import TodoItem from "./TodoItem";
+import Sortable from "sortablejs";
 
 export default class TodoList extends Component {
   constructor() {
@@ -53,7 +54,7 @@ export default class TodoList extends Component {
       ${
         todoList.length === 0
           ? `<div class="message">${todoStore.state.message}</div>`
-          : '<div class="todo-list"></div>'
+          : '<ul class="todo-list"></ul>'
       }
       <span class="material-symbols-outlined ${
         todoStore.state.todos.some((todo) => todo.done === true)
@@ -63,7 +64,23 @@ export default class TodoList extends Component {
     `;
 
     const todoListEl = this.el.querySelector(".todo-list");
-    todoListEl?.append(...todoList.map((todo) => new TodoItem({ todo }).el));
+    if (todoListEl) {
+      new Sortable(todoListEl, {
+        animation: 150,
+        onEnd: function (e) {
+          const { oldIndex, newIndex } = e;
+          const todoIds = todoStore.state.todos.map((todo) => todo.id);
+          const movedElement = todoIds[oldIndex];
+          todoIds.splice(oldIndex, 1);
+          todoIds.splice(newIndex, 0, movedElement);
+          reoreder(todoIds);
+        },
+      });
+    }
+
+    todoListEl?.append(
+      ...todoList.map((todo, index) => new TodoItem({ todo, index }).el)
+    );
 
     const categories = this.el.querySelectorAll(".category-item");
     categories.forEach((category) => {
@@ -77,7 +94,10 @@ export default class TodoList extends Component {
 
     const deleteButton = this.el.querySelector(".all-delete");
     deleteButton?.addEventListener("click", () => {
-      deleteAll();
+      const isDoneIds = todoStore.state.todos
+        .filter((todo) => todo.done === true)
+        .map((todo) => todo.id);
+      deleteAll(isDoneIds);
     });
   }
 }
