@@ -18,6 +18,7 @@ export default class TodoItem extends Component {
           todo.done ? "check_circle" : "radio_button_unchecked"
         }</span>
         <span class="${todo.done ? "done" : ""}">${todo.title}</span>
+        <span class="material-symbols-outlined handle">drag_indicator</span>
       </div>
 
       <div class="modal">

@@ -116,8 +116,8 @@ header {
     @media (max-width: 470px) {
       .description {
         p {
-          font-size: 12px;
-          line-height: 24px;
+          font-size: 13px;
+          line-height: 26px;
         }
       }
     }
@@ -268,13 +268,6 @@ header {
         &:hover {
           background-color: var(--color-complete-hover);
         }
-      }
-
-      .handle {
-        font-size: 40px;
-        position: absolute;
-        top: 10px;
-        right: 10px;
       }
     }
   }

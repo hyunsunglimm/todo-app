@@ -67,6 +67,7 @@ export default class TodoList extends Component {
     if (todoListEl) {
       new Sortable(todoListEl, {
         animation: 150,
+        handle: ".handle",
         onEnd: function (e) {
           const { oldIndex, newIndex } = e;
           const todoIds = todoStore.state.todos.map((todo) => todo.id);
