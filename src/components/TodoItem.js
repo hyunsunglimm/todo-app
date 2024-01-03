@@ -13,7 +13,7 @@ export default class TodoItem extends Component {
   render() {
     const { todo, index } = this.props;
     this.el.innerHTML = /* html */ `
-      <div class="todo-item" id="${todo.id}" index="${index + 1}">
+      <div class="todo-item" id="${todo.id}">
         <span class="material-symbols-outlined icon">${
           todo.done ? "check_circle" : "radio_button_unchecked"
         }</span>
@@ -35,20 +35,8 @@ export default class TodoItem extends Component {
             </div>
           </div>
           <div class="button">
-            ${
-              todoStore.state.updateLoading
-                ? `<div class="update">
-                    <div class="loader"></div>
-                  </div>`
-                : `<div class="update">수정</div>`
-            }
-            ${
-              todoStore.state.deleteLoading
-                ? `<div class="delete">
-                    <div class="loader"></div>
-                  </div>`
-                : `<div class="delete">삭제</div>`
-            }
+            <div class="update">수정</div>
+            <div class="delete">삭제</div>
           </div>
         </div>
       </div>
@@ -58,6 +46,8 @@ export default class TodoItem extends Component {
     iconEl.addEventListener("click", (event) => {
       event.stopPropagation();
       updateTodo(todo.id, todo.title, todo.order, !todo.done);
+      todo.done = !todo.done;
+      this.render();
     });
 
     const inputEl = this.el.querySelector(".title");

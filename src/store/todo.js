@@ -5,7 +5,6 @@ const store = new Store({
   todos: [],
   status: "all",
   loading: false,
-  deleteAllLoading: false,
   message: "",
 });
 
@@ -15,8 +14,10 @@ export function getCategory(status) {
   store.state.status = status;
 }
 
-export async function getTodos() {
-  store.state.loading = true;
+export async function getTodos(noLoading = false) {
+  if (!noLoading) {
+    store.state.loading = true;
+  }
   store.state.message = "";
   try {
     const res = await axios.get("/todos");
@@ -42,10 +43,10 @@ export async function addTodo(title, order) {
       title: `[주문접수] ${title}`,
       order: order === -Infinity ? 1 : order,
     });
+    getTodos();
   } catch (error) {
     console.error(error);
   } finally {
-    getTodos();
     store.state.loading = false;
   }
 }
@@ -57,10 +58,13 @@ export async function updateTodo(id, title, order, done, status) {
       done,
       order,
     });
+    let foundTodo = store.state.todos.find((todo) => todo.id === id);
+    Object.assign(foundTodo, res.data);
+    // set함수를 호출하여 상태구독을 활성화시키기 위한 코드
+    // set함수는 할당이 되어야 호출됨.
+    store.state.todos = store.state.todos;
   } catch (error) {
     console.error(error);
-  } finally {
-    getTodos();
   }
 }
 
@@ -82,10 +86,9 @@ export async function deleteAll(todoIds) {
         todoIds,
       },
     });
+    getTodos();
   } catch (error) {
     console.error(error);
-  } finally {
-    getTodos();
   }
 }
 
@@ -97,7 +100,5 @@ export async function reoreder(todoIds) {
     });
   } catch (error) {
     console.error(error);
-  } finally {
-    getTodos();
   }
 }

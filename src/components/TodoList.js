@@ -74,6 +74,14 @@ export default class TodoList extends Component {
           const movedElement = todoIds[oldIndex];
           todoIds.splice(oldIndex, 1);
           todoIds.splice(newIndex, 0, movedElement);
+
+          // UI 즉시 변경
+          todoStore.state.todos.splice(oldIndex, 1);
+          todoStore.state.todos.splice(
+            newIndex,
+            0,
+            todoStore.state.todos[oldIndex]
+          );
           reoreder(todoIds);
         },
       });
