@@ -77,7 +77,10 @@ export async function deleteTodo(id) {
 export async function deleteAll(todoIds) {
   try {
     const res = await axios.delete("/todos/deletions", {
-      todoIds,
+      // data 속성 생략 불가!
+      data: {
+        todoIds,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -89,6 +92,7 @@ export async function deleteAll(todoIds) {
 export async function reoreder(todoIds) {
   try {
     const res = await axios.put(`/todos/reorder`, {
+      // data 속성 생략!
       todoIds,
     });
   } catch (error) {

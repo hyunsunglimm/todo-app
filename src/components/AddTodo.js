@@ -24,7 +24,8 @@ export default class AddTodo extends Component {
 
     const inputEl = this.el.querySelector("input");
 
-    inputEl.addEventListener("keypress", (event) => {
+    inputEl.addEventListener("keydown", (event) => {
+      if (event.isComposing) return;
       if (event.key === "Enter" && event.target.value.trim()) {
         const maxOrder = getOrder();
         addTodo(event.target.value, maxOrder + 1);

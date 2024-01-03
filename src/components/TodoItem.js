@@ -102,9 +102,17 @@ export default class TodoItem extends Component {
       updateTodo(todo.id, inputEl.value, todo.order, todo.done, select.value);
     });
 
-    inputEl.addEventListener("keypress", (event) => {
+    inputEl.addEventListener("keydown", (event) => {
+      if (event.isComposing) return;
       if (event.key === "Enter" && event.target.value.trim()) {
-        updateTodo(todo.id, event.target.value, todo.order, todo.done);
+        const select = this.el.querySelector("input[name='status']:checked");
+        updateTodo(
+          todo.id,
+          event.target.value,
+          todo.order,
+          todo.done,
+          select.value
+        );
       }
     });
 
