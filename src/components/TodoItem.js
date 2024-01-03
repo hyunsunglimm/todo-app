@@ -11,7 +11,7 @@ export default class TodoItem extends Component {
     });
   }
   render() {
-    const { todo, index } = this.props;
+    const { todo } = this.props;
     this.el.innerHTML = /* html */ `
       <div class="todo-item" id="${todo.id}">
         <span class="material-symbols-outlined icon">${

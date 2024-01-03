@@ -76,20 +76,16 @@ export default class TodoList extends Component {
           todoIds.splice(newIndex, 0, movedElement);
 
           // UI 즉시 변경
-          todoStore.state.todos.splice(oldIndex, 1);
-          todoStore.state.todos.splice(
-            newIndex,
-            0,
-            todoStore.state.todos[oldIndex]
-          );
-          reoreder(todoIds);
+          const newTodos = [...todoStore.state.todos];
+          const movedTodo = newTodos[oldIndex];
+          newTodos.splice(oldIndex, 1);
+          newTodos.splice(newIndex, 0, movedTodo);
+          reoreder(todoIds, newTodos);
         },
       });
     }
 
-    todoListEl?.append(
-      ...todoList.map((todo, index) => new TodoItem({ todo, index }).el)
-    );
+    todoListEl?.append(...todoList.map((todo) => new TodoItem({ todo }).el));
 
     const categories = this.el.querySelectorAll(".category-item");
     categories.forEach((category) => {

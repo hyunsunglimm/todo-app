@@ -92,12 +92,13 @@ export async function deleteAll(todoIds) {
   }
 }
 
-export async function reoreder(todoIds) {
+export async function reoreder(todoIds, todos) {
   try {
     const res = await axios.put(`/todos/reorder`, {
       // data 속성 생략!
       todoIds,
     });
+    store.state.todos = todos;
   } catch (error) {
     console.error(error);
   }
